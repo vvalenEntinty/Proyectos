@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energía Solar La Plata - Soluciones Eco-Energéticas</title>
+    <meta name="description" content="Empresa líder en La Plata dedicada a la venta e instalación de paneles solares y productos de energía renovable. Ahorrá en tu factura de luz y cuidá el medio ambiente.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">
+                <span class="flex items-center"><i data-lucide="sun" class="mr-2"></i>Energía Solar La Plata</span>
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#nosotros" class="text-gray-600 hover:text-blue-600 transition duration-300">Nosotros</a>
+                <a href="#servicios" class="text-gray-600 hover:text-blue-600 transition duration-300">Servicios</a>
+                <a href="#productos" class="text-gray-600 hover:text-blue-600 transition duration-300">Productos</a>
+                <a href="#contacto" class="text-gray-600 hover:text-blue-600 transition duration-300">Contacto</a>
+            </div>
+            <a href="#contacto" class="hidden md:block bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition duration-300">Solicitar Presupuesto</a>
+            <button id="mobile-menu-button" class="md:hidden">
+                <i data-lucide="menu"></i>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#nosotros" class="block py-2 text-gray-600 hover:text-blue-600">Nosotros</a>
+            <a href="#servicios" class="block py-2 text-gray-600 hover:text-blue-600">Servicios</a>
+            <a href="#productos" class="block py-2 text-gray-600 hover:text-blue-600">Productos</a>
+            <a href="#contacto" class="block py-2 text-gray-600 hover:text-blue-600">Contacto</a>
+            <a href="#contacto" class="block mt-2 text-center bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700">Solicitar Presupuesto</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg text-white">
+            <div class="container mx-auto px-6 py-32 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Transformá tu Hogar y Empresa con Energía Limpia</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">En Energía Solar La Plata te ofrecemos soluciones a medida para que generes tu propia energía, ahorres dinero y contribuyas a un futuro más sostenible.</p>
+                <a href="#contacto" class="bg-yellow-400 text-gray-900 font-bold px-8 py-4 rounded-full hover:bg-yellow-500 transition duration-300 text-lg">Pedí tu Asesoramiento Gratuito</a>
+            </div>
+        </section>
+
+        <!-- Nosotros Section -->
+        <section id="nosotros" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1545259742-b4fd35479a3d?q=80&w=1939&auto=format&fit=crop" alt="Equipo instalando paneles solares" class="rounded-lg shadow-xl w-full h-auto">
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Sobre Nosotros</h2>
+                        <p class="text-gray-600 mb-4">
+                            Somos una empresa platense apasionada por las energías renovables. Con más de 10 años de experiencia, nuestro objetivo es acercar la tecnología solar a cada hogar y negocio de la región, garantizando instalaciones de máxima calidad y un servicio postventa excepcional.
+                        </p>
+                        <p class="text-gray-600 mb-6">
+                            Creemos en un futuro energético independiente y sostenible. Por eso, trabajamos con los mejores materiales y un equipo de profesionales altamente capacitados para diseñar el sistema perfecto para tus necesidades.
+                        </p>
+                        <div class="flex space-x-4">
+                            <div class="bg-blue-100 p-4 rounded-lg text-center">
+                                <p class="text-3xl font-bold text-blue-600">+200</p>
+                                <p class="text-gray-600">Instalaciones Exitosas</p>
+                            </div>
+                            <div class="bg-green-100 p-4 rounded-lg text-center">
+                                <p class="text-3xl font-bold text-green-600">+10</p>
+                                <p class="text-gray-600">Años de Experiencia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Servicios Section -->
+        <section id="servicios" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-2">Nuestros Servicios</h2>
+                <p class="text-gray-600 mb-12 max-w-2xl mx-auto">Ofrecemos un servicio integral para que no tengas que preocuparte por nada.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Servicio 1 -->
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                        <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="solar-panel" class="text-blue-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Instalación de Paneles Solares</h3>
+                        <p class="text-gray-600">Diseñamos e instalamos sistemas fotovoltaicos a medida para residencias, comercios e industrias. Nos encargamos de todo el proceso, desde el cálculo hasta la puesta en marcha.</p>
+                    </div>
+                    <!-- Servicio 2 -->
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                        <div class="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="wrench" class="text-green-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Mantenimiento y Soporte</h3>
+                        <p class="text-gray-600">Aseguramos el óptimo rendimiento de tu instalación con planes de mantenimiento preventivo y un servicio técnico rápido y eficaz para resolver cualquier incidencia.</p>
+                    </div>
+                    <!-- Servicio 3 -->
+                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                        <div class="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="lightbulb" class="text-yellow-600 w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Productos Eco-Energéticos</h3>
+                        <p class="text-gray-600">Además de paneles, proveemos termotanques solares, climatizadores de piletas y sistemas de bombeo solar, para una solución energética completa y eficiente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Productos Section -->
+        <section id="productos" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">Productos Destacados</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Producto 1 -->
+                    <div class="border rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300">
+                        <img src="https://images.unsplash.com/photo-1624397844186-082875344842?q=80&w=1974&auto=format&fit=crop" alt="Panel Solar Monocristalino" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-lg mb-2">Paneles Solares</h3>
+                            <p class="text-gray-600 text-sm">Trabajamos con paneles monocristalinos y policristalinos de alta eficiencia, con garantía de hasta 25 años.</p>
+                        </div>
+                    </div>
+                    <!-- Producto 2 -->
+                    <div class="border rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300">
+                        <img src="https://images.unsplash.com/photo-1619215797316-e41a0070c791?q=80&w=2070&auto=format&fit=crop" alt="Inversor de Corriente" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-lg mb-2">Inversores de Corriente</h3>
+                            <p class="text-gray-600 text-sm">El cerebro de tu sistema. Ofrecemos inversores on-grid, off-grid e híbridos de las marcas más confiables del mercado.</p>
+                        </div>
+                    </div>
+                    <!-- Producto 3 -->
+                    <div class="border rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300">
+                        <img src="https://images.unsplash.com/photo-1624728533935-3253f5383a15?q=80&w=2070&auto=format&fit=crop" alt="Batería de Litio" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-lg mb-2">Baterías de Almacenamiento</h3>
+                            <p class="text-gray-600 text-sm">Almacená la energía excedente para usarla de noche o durante cortes de luz. Soluciones con baterías de litio de larga vida útil.</p>
+                        </div>
+                    </div>
+                    <!-- Producto 4 -->
+                    <div class="border rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300">
+                        <img src="https://images.unsplash.com/photo-1586011311543-1b8997a0e37b?q=80&w=1974&auto=format&fit=crop" alt="Termotanque Solar" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-lg mb-2">Termotanques Solares</h3>
+                            <p class="text-gray-600 text-sm">Ahorrá hasta un 80% en tu consumo de gas o electricidad para calentar agua. Ideales para toda la familia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto Section -->
+        <section id="contacto" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4">Contactanos</h2>
+                        <p class="text-gray-600 mb-8">¿Tenés un proyecto en mente? Completá el formulario o contactanos por nuestros otros canales. Estamos para asesorarte.</p>
+                        <div class="space-y-4">
+                            <p class="flex items-center"><i data-lucide="phone" class="w-5 h-5 mr-3 text-blue-600"></i> +54 9 221 123-4567</p>
+                            <p class="flex items-center"><i data-lucide="mail" class="w-5 h-5 mr-3 text-blue-600"></i> contacto@energiasolarlaplata.com</p>
+                            <p class="flex items-center"><i data-lucide="map-pin" class="w-5 h-5 mr-3 text-blue-600"></i> Calle 13 e/ 47 y 48, La Plata, Buenos Aires</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <form id="contact-form">
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 font-semibold mb-2">Nombre Completo</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="message" class="block text-gray-700 font-semibold mb-2">Mensaje</label>
+                                <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">Enviar Consulta</button>
+                        </form>
+                        <div id="form-feedback" class="mt-4 text-center"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Energía Solar La Plata. Todos los derechos reservados.</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="facebook"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contact-form');
+        const formFeedback = document.getElementById('form-feedback');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            formFeedback.textContent = 'Gracias por tu mensaje. Te contactaremos a la brevedad.';
+            formFeedback.className = 'text-green-600';
+            contactForm.reset();
+            setTimeout(() => {
+                formFeedback.textContent = '';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
