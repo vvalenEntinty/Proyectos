@@ -1,0 +1,307 @@
+/*
+    IMPORTANTE: Estructura del Proyecto y Dependencias
+    ----------------------------------------------------
+
+    1.  Crea un nuevo proyecto en Android Studio con "Empty Activity" (Compose).
+    2.  Conecta tu app a Firebase: https://firebase.google.com/docs/android/setup
+    3.  Agrega el archivo `google-services.json` a tu módulo `app`.
+    4.  Asegúrate de tener las siguientes dependencias en tu archivo `app/build.gradle.kts`:
+
+        // Firebase
+        implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+        implementation("com.google.firebase:firebase-firestore-ktx")
+        implementation("com.google.firebase:firebase-auth-ktx")
+
+        // ViewModel y LiveData para Compose
+        implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+        implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
+
+        // Navegación en Compose (Opcional, para apps más complejas)
+        implementation("androidx.navigation:navigation-compose:2.7.7")
+
+        // Iconos de Material Design
+        implementation("androidx.compose.material:material-icons-extended:1.6.7")
+*/
+
+
+// --- Archivo: data/Product.kt ---
+// Modelo de datos para representar un producto.
+package com.example.stockapp.data
+
+data class Product(
+    val id: String = "",
+    val code: String = "",
+    val name: String = "",
+    val quantity: Int = 0
+)
+
+
+// --- Archivo: viewmodel/StockViewModel.kt ---
+// Contiene toda la lógica de negocio y la comunicación con Firebase.
+package com.example.stockapp.viewmodel
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.stockapp.data.Product
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObjects
+
+class StockViewModel : ViewModel() {
+
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
+    private val _products = MutableLiveData<List<Product>>()
+    val products: LiveData<List<Product>> = _products
+
+    private val _message = MutableLiveData<String?>()
+    val message: LiveData<String?> = _message
+
+    init {
+        // Iniciar sesión anónimamente si no hay un usuario
+        if (auth.currentUser == null) {
+            auth.signInAnonymously().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    loadProducts()
+                } else {
+                    _message.value = "Error de autenticación."
+                }
+            }
+        } else {
+            loadProducts()
+        }
+    }
+
+    private fun loadProducts() {
+        val userId = auth.currentUser?.uid ?: return
+        val appId = "default-stock-app" // Debe coincidir con el de la app web
+
+        db.collection("artifacts/$appId/users/$userId/products")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    _message.value = "Error al cargar productos."
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val productList = snapshot.toObjects<Product>().sortedBy { it.code }
+                    _products.value = productList
+                }
+            }
+    }
+
+    fun addOrUpdateProduct(code: String, name: String, quantity: Int) {
+        val userId = auth.currentUser?.uid ?: return
+        val appId = "default-stock-app"
+        val collectionRef = db.collection("artifacts/$appId/users/$userId/products")
+
+        collectionRef.whereEqualTo("code", code).get().addOnSuccessListener { documents ->
+            if (!documents.isEmpty) {
+                // Actualizar producto existente
+                val doc = documents.documents[0]
+                val currentQuantity = doc.getLong("quantity") ?: 0
+                collectionRef.document(doc.id)
+                    .update("quantity", currentQuantity + quantity, "name", name)
+                    .addOnSuccessListener { _message.value = "Stock de '$name' actualizado." }
+            } else {
+                // Agregar nuevo producto
+                val newProduct = Product(code = code, name = name, quantity = quantity)
+                collectionRef.add(newProduct)
+                    .addOnSuccessListener { _message.value = "Producto '$name' agregado." }
+            }
+        }.addOnFailureListener {
+            _message.value = "Error al guardar el producto."
+        }
+    }
+
+    fun sellProduct(product: Product, quantityToSell: Int) {
+        val userId = auth.currentUser?.uid ?: return
+        val appId = "default-stock-app"
+
+        if (quantityToSell > product.quantity) {
+            _message.value = "No hay suficiente stock para vender."
+            return
+        }
+        val newQuantity = product.quantity - quantityToSell
+        db.collection("artifacts/$appId/users/$userId/products").document(product.id)
+            .update("quantity", newQuantity)
+            .addOnSuccessListener { _message.value = "Venta registrada." }
+    }
+
+    fun updateProductDetails(product: Product, newCode: String, newName: String) {
+         val userId = auth.currentUser?.uid ?: return
+        val appId = "default-stock-app"
+        db.collection("artifacts/$appId/users/$userId/products").document(product.id)
+            .update("code", newCode, "name", newName)
+            .addOnSuccessListener { _message.value = "Producto actualizado." }
+    }
+
+    fun deleteProduct(product: Product) {
+        val userId = auth.currentUser?.uid ?: return
+        val appId = "default-stock-app"
+        db.collection("artifacts/$appId/users/$userId/products").document(product.id)
+            .delete()
+            .addOnSuccessListener { _message.value = "Producto eliminado." }
+    }
+    
+    fun messageShown() {
+        _message.value = null
+    }
+}
+
+
+// --- Archivo: ui/StockScreen.kt ---
+// Contiene todos los @Composable que forman la interfaz de usuario.
+package com.example.stockapp.ui
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.stockapp.data.Product
+import com.example.stockapp.viewmodel.StockViewModel
+
+@Composable
+fun StockScreen(viewModel: StockViewModel) {
+    val products by viewModel.products.observeAsState(initial = emptyList())
+    val message by viewModel.message.observeAsState()
+    val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(message) {
+        message?.let {
+            scaffoldState.snackbarHostState.showSnackbar(it)
+            viewModel.messageShown()
+        }
+    }
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = { TopAppBar(title = { Text("Control de Stock") }) }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+        ) {
+            AddProductForm(onAddProduct = { code, name, quantity ->
+                viewModel.addOrUpdateProduct(code, name, quantity)
+            })
+            Spacer(modifier = Modifier.height(16.dp))
+            ProductList(products = products, viewModel = viewModel)
+        }
+    }
+}
+
+@Composable
+fun AddProductForm(onAddProduct: (String, String, Int) -> Unit) {
+    var code by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var quantity by remember { mutableStateOf("") }
+
+    Card(elevation = 4.dp) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            OutlinedTextField(
+                value = code,
+                onValueChange = { code = it },
+                label = { Text("Código del Producto") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Nombre del Producto") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = quantity,
+                onValueChange = { quantity = it },
+                label = { Text("Cantidad a Agregar") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    val qty = quantity.toIntOrNull()
+                    if (code.isNotBlank() && name.isNotBlank() && qty != null && qty > 0) {
+                        onAddProduct(code.uppercase(), name, qty)
+                        code = ""
+                        name = ""
+                        quantity = ""
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Agregar")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("AGREGAR / ACTUALIZAR")
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductList(products: List<Product>, viewModel: StockViewModel) {
+    LazyColumn {
+        items(products, key = { it.id }) { product ->
+            ProductListItem(product = product, viewModel = viewModel)
+            Divider()
+        }
+    }
+}
+
+@Composable
+fun ProductListItem(product: Product, viewModel: StockViewModel) {
+    // Aquí podrías agregar la lógica para los modales de venta, edición y eliminación.
+    // Por simplicidad, solo se muestra la información y un botón de borrado.
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(product.name, style = MaterialTheme.typography.h6)
+            Text("Código: ${product.code} | Stock: ${product.quantity}", style = MaterialTheme.typography.body2)
+        }
+        IconButton(onClick = { viewModel.deleteProduct(product) }) {
+            Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = MaterialTheme.colors.error)
+        }
+    }
+}
+
+// --- Archivo: MainActivity.kt ---
+// El punto de entrada de tu aplicación.
+package com.example.stockapp
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import com.example.stockapp.ui.StockScreen
+import com.example.stockapp.ui.theme.StockAppTheme // Asegúrate de que el nombre del tema sea correcto
+import com.example.stockapp.viewmodel.StockViewModel
+
+class MainActivity : ComponentActivity() {
+    
+    private val stockViewModel: StockViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            StockAppTheme {
+                StockScreen(viewModel = stockViewModel)
+            }
+        }
+    }
+}
